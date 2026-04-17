@@ -14,9 +14,7 @@
           "script": {
             "exec": [
               "let api = pm.response.json()\r",
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
+              "\r",
               "\r",
               "pm.collectionVariables.set(\"idBoards\",api.id)\r",
               "pm.test(\"Products have required keys\", function () {\r",
@@ -28,6 +26,9 @@
               "});\r",
               "pm.test(\"test desc\", function () {\r",
               "    pm.expect(api.desc).to.eql(pm.collectionVariables.get(\"desc\"));\r",
+              "});\r",
+              "pm.test(\"test permissionLevel\", function () {\r",
+              "    pm.expect(api.prefs.permissionLevel).to.eql(\"private\");\r",
               "});"
             ],
             "type": "text/javascript",
@@ -52,15 +53,11 @@
         "method": "POST",
         "header": [],
         "url": {
-          "raw": "https://api.trello.com/1/boards/?name={{NameofBoard}}&key={{ApiKey}}&token={{ApiToken}}&desc={{desc}}",
-          "protocol": "https",
+          "raw": "{{Base_UrL}}/boards/?name={{NameofBoard}}&key={{ApiKey}}&token={{ApiToken}}&desc={{desc}}",
           "host": [
-            "api",
-            "trello",
-            "com"
+            "{{Base_UrL}}"
           ],
           "path": [
-            "1",
             "boards",
             ""
           ],
@@ -94,9 +91,7 @@
           "script": {
             "exec": [
               "let api = pm.response.json()\r",
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
+              "\r",
               "\r",
               "pm.test(\"Products have required keys\", function () {\r",
               "    pm.expect(api).to.include.all.keys(\"id\", \"name\", \"desc\");\r",
@@ -107,6 +102,9 @@
               "});\r",
               "pm.test(\"test desc\", function () {\r",
               "    pm.expect(api.desc).to.eql(pm.collectionVariables.get(\"desc\"));\r",
+              "});\r",
+              "pm.test(\"test permissionLevel\", function () {\r",
+              "    pm.expect(api.prefs.permissionLevel).to.eql(\"private\");\r",
               "});"
             ],
             "type": "text/javascript",
@@ -135,15 +133,11 @@
           }
         ],
         "url": {
-          "raw": "https://api.trello.com/1/boards/{{idBoards}}?key={{ApiKey}}&token={{ApiToken}}",
-          "protocol": "https",
+          "raw": "{{Base_UrL}}/boards/{{idBoards}}?key={{ApiKey}}&token={{ApiToken}}",
           "host": [
-            "api",
-            "trello",
-            "com"
+            "{{Base_UrL}}"
           ],
           "path": [
-            "1",
             "boards",
             "{{idBoards}}"
           ],
@@ -169,9 +163,6 @@
           "script": {
             "exec": [
               "let api = pm.response.json()\r",
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
               "\r",
               "pm.test(\"Products have required keys\", function () {\r",
               "    pm.expect(api).to.include.all.keys(\"id\", \"name\", \"desc\");\r",
@@ -182,6 +173,12 @@
               "});\r",
               "pm.test(\"test desc\", function () {\r",
               "    pm.expect(api.desc).to.eql(pm.collectionVariables.get(\"descUpdated\"));\r",
+              "});\r",
+              "pm.test(\"test closed\", function () {\r",
+              "    pm.expect(api.closed).to.eql(pm.collectionVariables.get(\"Closed\"));\r",
+              "});\r",
+              "pm.test(\"test closed\", function () {\r",
+              "    pm.expect(api.prefs.permissionLevel).to.eql(pm.collectionVariables.get(\"permissionLevel\"));\r",
               "});"
             ],
             "type": "text/javascript",
@@ -194,7 +191,9 @@
           "script": {
             "exec": [
               "pm.collectionVariables.set(\"NameofBoardUpdated\", \"Ahmed Maher\" + Math.floor(Math.random() * 1000));\r",
-              "pm.collectionVariables.set(\"descUpdated\", \"Ahmed Maher is desc Updated\");"
+              "pm.collectionVariables.set(\"descUpdated\", \"Ahmed Maher is desc Updated\");\r",
+              "pm.collectionVariables.set(\"Closed\", false);\r",
+              "pm.collectionVariables.set(\"permissionLevel\", \"public\");"
             ],
             "type": "text/javascript",
             "packages": {},
@@ -206,15 +205,11 @@
         "method": "PUT",
         "header": [],
         "url": {
-          "raw": "https://api.trello.com/1/boards/{{idBoards}}?key={{ApiKey}}&token={{ApiToken}}&name={{NameofBoardUpdated}}&desc={{descUpdated}}",
-          "protocol": "https",
+          "raw": "{{Base_UrL}}/boards/{{idBoards}}?key={{ApiKey}}&token={{ApiToken}}&name={{NameofBoardUpdated}}&desc={{descUpdated}}&closed={{Closed}}&prefs/permissionLevel={{permissionLevel}}",
           "host": [
-            "api",
-            "trello",
-            "com"
+            "{{Base_UrL}}"
           ],
           "path": [
-            "1",
             "boards",
             "{{idBoards}}"
           ],
@@ -234,6 +229,89 @@
             {
               "key": "desc",
               "value": "{{descUpdated}}"
+            },
+            {
+              "key": "closed",
+              "value": "{{Closed}}"
+            },
+            {
+              "key": "prefs/permissionLevel",
+              "value": "{{permissionLevel}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Board",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let api = pm.response.json()\r",
+              "\r",
+              "\r",
+              "pm.test(\"Products have required keys\", function () {\r",
+              "    pm.expect(api).to.include.all.keys(\"id\", \"name\", \"desc\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"test Name\", function () {\r",
+              "    pm.expect(api.name).to.eql(pm.collectionVariables.get(\"NameofBoardUpdated\"));\r",
+              "});\r",
+              "pm.test(\"test desc\", function () {\r",
+              "    pm.expect(api.desc).to.eql(pm.collectionVariables.get(\"descUpdated\"));\r",
+              "});\r",
+              "pm.test(\"test closed\", function () {\r",
+              "    pm.expect(api.closed).to.eql(pm.collectionVariables.get(\"Closed\"));\r",
+              "});\r",
+              "pm.test(\"test closed\", function () {\r",
+              "    pm.expect(api.prefs.permissionLevel).to.eql(pm.collectionVariables.get(\"permissionLevel\"));\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{Base_UrL}}/boards/{{idBoards}}?key={{ApiKey}}&token={{ApiToken}}",
+          "host": [
+            "{{Base_UrL}}"
+          ],
+          "path": [
+            "boards",
+            "{{idBoards}}"
+          ],
+          "query": [
+            {
+              "key": "key",
+              "value": "{{ApiKey}}"
+            },
+            {
+              "key": "token",
+              "value": "{{ApiToken}}"
             }
           ]
         }
@@ -249,14 +327,18 @@
             "exec": [
               "let api = pm.response.json()\r",
               "pm.collectionVariables.set(\"idList\", api.id)\r",
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
+              "\r",
               "pm.test(\"test Name\", function () {\r",
               "    pm.expect(api.name).to.eql(pm.collectionVariables.get(\"NameofList\"));\r",
               "});\r",
               "pm.test(\"test Id Board\", function () {\r",
               "    pm.expect(api.idBoard).to.eql(pm.collectionVariables.get(\"idBoards\"));\r",
+              "});\r",
+              "pm.test(\"test Id Board\", function () {\r",
+              "    pm.expect(api.pos).to.eql(pm.collectionVariables.get(\"pos\"));\r",
+              "});\r",
+              "pm.test(\"test closed\", function () {\r",
+              "    pm.expect(api.closed).to.eql(pm.collectionVariables.get(\"Closed\"));\r",
               "});"
             ],
             "type": "text/javascript",
@@ -268,7 +350,9 @@
           "listen": "prerequest",
           "script": {
             "exec": [
-              "pm.collectionVariables.set(\"NameofList\", \"Ahmed Maher\" + Math.floor(Math.random() * 1000));"
+              "pm.collectionVariables.set(\"NameofList\", \"Ahmed Maher\" + Math.floor(Math.random() * 1000));\r",
+              "pm.collectionVariables.set(\"pos\",parseInt((Math.floor(Math.random()*10))));\r",
+              ""
             ],
             "type": "text/javascript",
             "packages": {},
@@ -280,15 +364,11 @@
         "method": "POST",
         "header": [],
         "url": {
-          "raw": "https://api.trello.com/1/lists?name={{NameofList}}&idBoard={{idBoards}}&key={{ApiKey}}&token={{ApiToken}}",
-          "protocol": "https",
+          "raw": "{{Base_UrL}}/lists?name={{NameofList}}&idBoard={{idBoards}}&key={{ApiKey}}&token={{ApiToken}}&closed={{Closed}}&pos={{pos}}",
           "host": [
-            "api",
-            "trello",
-            "com"
+            "{{Base_UrL}}"
           ],
           "path": [
-            "1",
             "lists"
           ],
           "query": [
@@ -307,6 +387,14 @@
             {
               "key": "token",
               "value": "{{ApiToken}}"
+            },
+            {
+              "key": "closed",
+              "value": "{{Closed}}"
+            },
+            {
+              "key": "pos",
+              "value": "{{pos}}"
             }
           ]
         }
@@ -321,9 +409,6 @@
           "script": {
             "exec": [
               "let api = pm.response.json()\r",
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
               "\r",
               "pm.test(\"Products have required keys\", function () {\r",
               "    pm.expect(api).to.include.all.keys(\"id\", \"name\", \"idBoard\");\r",
@@ -334,7 +419,21 @@
               "});\r",
               "pm.test(\"test Id Board\", function () {\r",
               "    pm.expect(api.idBoard).to.eql(pm.collectionVariables.get(\"idBoards\"));\r",
+              "});\r",
+              "pm.test(\"test Id Board\", function () {\r",
+              "    pm.expect(api.pos).to.eql(pm.collectionVariables.get(\"pos\"));\r",
               "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
             ],
             "type": "text/javascript",
             "packages": {},
@@ -346,15 +445,11 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "https://api.trello.com/1/lists/{{idList}}?key={{ApiKey}}&token={{ApiToken}}",
-          "protocol": "https",
+          "raw": "{{Base_UrL}}/lists/{{idList}}?key={{ApiKey}}&token={{ApiToken}}",
           "host": [
-            "api",
-            "trello",
-            "com"
+            "{{Base_UrL}}"
           ],
           "path": [
-            "1",
             "lists",
             "{{idList}}"
           ],
@@ -380,9 +475,6 @@
           "script": {
             "exec": [
               "let api = pm.response.json()\r",
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
               "\r",
               "pm.test(\"Products have required keys\", function () {\r",
               "    pm.expect(api).to.include.all.keys(\"id\", \"name\", \"idBoard\");\r",
@@ -396,6 +488,9 @@
               "});\r",
               "pm.test(\"test colosed\", function () {\r",
               "    pm.expect(api.closed).to.eql(pm.collectionVariables.get(\"Closed\"));\r",
+              "});\r",
+              "pm.test(\"test pos\", function () {\r",
+              "    pm.expect(api.pos).to.eql(Number(pm.collectionVariables.get(\"pos\")));\r",
               "});"
             ],
             "type": "text/javascript",
@@ -408,7 +503,7 @@
           "script": {
             "exec": [
               "pm.collectionVariables.set(\"NameofListUpdated\", \"Ahmed Maher\" + Math.floor(Math.random() * 1000));\r",
-              "pm.collectionVariables.set(\"Closed\", true);"
+              ""
             ],
             "type": "text/javascript",
             "packages": {},
@@ -420,15 +515,11 @@
         "method": "PUT",
         "header": [],
         "url": {
-          "raw": "https://api.trello.com/1/lists/{{idList}}?key={{ApiKey}}&token={{ApiToken}}&name={{NameofListUpdated}}&closed={{Closed}}",
-          "protocol": "https",
+          "raw": "{{Base_UrL}}/lists/{{idList}}?key={{ApiKey}}&token={{ApiToken}}&name={{NameofListUpdated}}&closed={{Closed}}&pos={{pos}}",
           "host": [
-            "api",
-            "trello",
-            "com"
+            "{{Base_UrL}}"
           ],
           "path": [
-            "1",
             "lists",
             "{{idList}}"
           ],
@@ -448,6 +539,10 @@
             {
               "key": "closed",
               "value": "{{Closed}}"
+            },
+            {
+              "key": "pos",
+              "value": "{{pos}}"
             }
           ]
         }
@@ -463,9 +558,7 @@
             "exec": [
               "let api = pm.response.json();\r",
               "pm.collectionVariables.set(\"idcard\",api.id)\r",
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
+              "\r",
               "pm.test(\"Products have required keys\", function () {\r",
               "    pm.expect(api).to.include.all.keys(\"id\", \"name\", \"idList\",\"idBoard\");\r",
               "});\r",
@@ -477,7 +570,13 @@
               "    pm.expect(api.idBoard).to.eql(pm.collectionVariables.get(\"idBoards\"));\r",
               "});\r",
               "\r",
-              ""
+              "pm.test(\"test Id Board\", function () {\r",
+              "    pm.expect(api.dueComplete).to.eql(pm.collectionVariables.get(\"Closed\"));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"test pos\", function () {\r",
+              "    pm.expect(api.pos).to.eql(pm.collectionVariables.get(\"pos\"));\r",
+              "});"
             ],
             "type": "text/javascript",
             "packages": {},
@@ -506,15 +605,11 @@
           }
         ],
         "url": {
-          "raw": "https://api.trello.com/1/cards?idList={{idList}}&key={{ApiKey}}&token={{ApiToken}}&name={{NameofCard}}",
-          "protocol": "https",
+          "raw": "{{Base_UrL}}/cards?idList={{idList}}&key={{ApiKey}}&token={{ApiToken}}&name={{NameofCard}}&pos={{pos}}&dueComplete={{Closed}}",
           "host": [
-            "api",
-            "trello",
-            "com"
+            "{{Base_UrL}}"
           ],
           "path": [
-            "1",
             "cards"
           ],
           "query": [
@@ -533,6 +628,14 @@
             {
               "key": "name",
               "value": "{{NameofCard}}"
+            },
+            {
+              "key": "pos",
+              "value": "{{pos}}"
+            },
+            {
+              "key": "dueComplete",
+              "value": "{{Closed}}"
             }
           ]
         }
@@ -546,9 +649,37 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
+              "let api = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Products have required keys\", function () {\r",
+              "    pm.expect(api).to.include.all.keys(\"id\", \"name\", \"idList\",\"idBoard\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"test Name\", function () {\r",
+              "    pm.expect(api.name).to.eql(pm.collectionVariables.get(\"NameofCard\"));\r",
+              "});\r",
+              "pm.test(\"test Id Board\", function () {\r",
+              "    pm.expect(api.idBoard).to.eql(pm.collectionVariables.get(\"idBoards\"));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"test Id Board\", function () {\r",
+              "    pm.expect(api.dueComplete).to.eql(pm.collectionVariables.get(\"Closed\"));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"test pos\", function () {\r",
+              "    pm.expect(api.pos).to.eql(pm.collectionVariables.get(\"pos\"));\r",
               "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
             ],
             "type": "text/javascript",
             "packages": {},
@@ -565,15 +696,11 @@
           }
         ],
         "url": {
-          "raw": "https://api.trello.com/1/cards/{{idcard}}?key={{ApiKey}}&token={{ApiToken}}",
-          "protocol": "https",
+          "raw": "{{Base_UrL}}/cards/{{idcard}}?key={{ApiKey}}&token={{ApiToken}}",
           "host": [
-            "api",
-            "trello",
-            "com"
+            "{{Base_UrL}}"
           ],
           "path": [
-            "1",
             "cards",
             "{{idcard}}"
           ],
@@ -599,9 +726,7 @@
           "script": {
             "exec": [
               "let api = pm.response.json()\r",
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
+              "\r",
               "\r",
               "pm.test(\"Products have required keys\", function () {\r",
               "    pm.expect(api).to.include.all.keys(\"id\", \"name\", \"desc\");\r",
@@ -612,6 +737,9 @@
               "});\r",
               "pm.test(\"test desc\", function () {\r",
               "    pm.expect(api.desc).to.eql(pm.collectionVariables.get(\"descUpdated\"));\r",
+              "});\r",
+              "pm.test(\"test dueComplete\", function () {\r",
+              "    pm.expect(api.dueComplete).to.eql(pm.collectionVariables.get(\"ClosedUpdated\"));\r",
               "});"
             ],
             "type": "text/javascript",
@@ -624,7 +752,9 @@
           "script": {
             "exec": [
               "pm.collectionVariables.set(\"CardUpdated\", \"Ahmed Maher\" + Math.floor(Math.random() * 1000));\r",
-              "pm.collectionVariables.set(\"descUpdatedCard\", \"Ahmed Maher is desc Updated\");"
+              "pm.collectionVariables.set(\"descUpdatedCard\", \"Ahmed Maher is desc Updated\");\r",
+              "pm.collectionVariables.set(\"ClosedUpdated\", true);\r",
+              ""
             ],
             "type": "text/javascript",
             "packages": {},
@@ -641,15 +771,11 @@
           }
         ],
         "url": {
-          "raw": "https://api.trello.com/1/cards/{{idcard}}?key={{ApiKey}}&token={{ApiToken}}&name={{CardUpdated}}&desc={{descUpdatedCard}}&closed={{Closed}}",
-          "protocol": "https",
+          "raw": "{{Base_UrL}}/cards/{{idcard}}?key={{ApiKey}}&token={{ApiToken}}&name={{CardUpdated}}&desc={{descUpdatedCard}}&closed={{Closed}}&pos={{pos}}&dueComplete={{ClosedUpdated}}",
           "host": [
-            "api",
-            "trello",
-            "com"
+            "{{Base_UrL}}"
           ],
           "path": [
-            "1",
             "cards",
             "{{idcard}}"
           ],
@@ -673,6 +799,86 @@
             {
               "key": "closed",
               "value": "{{Closed}}"
+            },
+            {
+              "key": "pos",
+              "value": "{{pos}}"
+            },
+            {
+              "key": "dueComplete",
+              "value": "{{ClosedUpdated}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get card",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let api = pm.response.json()\r",
+              "\r",
+              "\r",
+              "pm.test(\"Products have required keys\", function () {\r",
+              "    pm.expect(api).to.include.all.keys(\"id\", \"name\", \"desc\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"test Name\", function () {\r",
+              "    pm.expect(api.name).to.eql(pm.collectionVariables.get(\"CardUpdated\"));\r",
+              "});\r",
+              "pm.test(\"test desc\", function () {\r",
+              "    pm.expect(api.desc).to.eql(pm.collectionVariables.get(\"descUpdated\"));\r",
+              "});\r",
+              "pm.test(\"test dueComplete\", function () {\r",
+              "    pm.expect(api.dueComplete).to.eql(pm.collectionVariables.get(\"ClosedUpdated\"));\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{Base_UrL}}/cards/{{idcard}}?key={{ApiKey}}&token={{ApiToken}}",
+          "host": [
+            "{{Base_UrL}}"
+          ],
+          "path": [
+            "cards",
+            "{{idcard}}"
+          ],
+          "query": [
+            {
+              "key": "key",
+              "value": "{{ApiKey}}"
+            },
+            {
+              "key": "token",
+              "value": "{{ApiToken}}"
             }
           ]
         }
@@ -686,7 +892,9 @@
           "listen": "prerequest",
           "script": {
             "exec": [
-              "pm.collectionVariables.set(\"nameofChecklist\", \"Api Testing Checklist\");"
+              "pm.collectionVariables.set(\"nameofChecklist\", \"Api Testing Checklist\");\r",
+              "pm.collectionVariables.set(\"poscheck\",parseInt((Math.floor(Math.random()*10))));\r",
+              ""
             ],
             "type": "text/javascript",
             "packages": {},
@@ -698,9 +906,7 @@
           "script": {
             "exec": [
               "let api = pm.response.json()\r",
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
+              "\r",
               "pm.collectionVariables.set(\"idChecklist\", api.id);\r",
               "pm.test(\"Products have required keys\", function () {\r",
               "    pm.expect(api).to.include.all.keys(\"id\", \"name\");\r",
@@ -709,7 +915,15 @@
               "pm.test(\"test Name\", function () {\r",
               "    pm.expect(api.name).to.eql(pm.collectionVariables.get(\"nameofChecklist\"));\r",
               "});\r",
-              ""
+              "pm.test(\"test pos\", function () {\r",
+              "    pm.expect(api.pos).to.eql(pm.collectionVariables.get(\"poscheck\"));\r",
+              "});\r",
+              "pm.test(\"test Id Card\", function () {\r",
+              "    pm.expect(api.idCard).to.eql(pm.collectionVariables.get(\"idcard\"));\r",
+              "});\r",
+              "pm.test(\"test Id Board\", function () {\r",
+              "    pm.expect(api.idBoard).to.eql(pm.collectionVariables.get(\"idBoards\"));\r",
+              "});"
             ],
             "type": "text/javascript",
             "packages": {},
@@ -721,15 +935,11 @@
         "method": "POST",
         "header": [],
         "url": {
-          "raw": "https://api.trello.com/1/checklists?idCard={{idcard}}&key={{ApiKey}}&token={{ApiToken}}&name={{nameofChecklist}}",
-          "protocol": "https",
+          "raw": "{{Base_UrL}}/checklists?idCard={{idcard}}&key={{ApiKey}}&token={{ApiToken}}&name={{nameofChecklist}}&pos={{poscheck}}",
           "host": [
-            "api",
-            "trello",
-            "com"
+            "{{Base_UrL}}"
           ],
           "path": [
-            "1",
             "checklists"
           ],
           "query": [
@@ -748,6 +958,10 @@
             {
               "key": "name",
               "value": "{{nameofChecklist}}"
+            },
+            {
+              "key": "pos",
+              "value": "{{poscheck}}"
             }
           ]
         }
@@ -756,19 +970,56 @@
     },
     {
       "name": "Get checklist",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let api = pm.response.json()\r",
+              "\r",
+              "pm.test(\"Products have required keys\", function () {\r",
+              "    pm.expect(api).to.include.all.keys(\"id\", \"name\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"test Name\", function () {\r",
+              "    pm.expect(api.name).to.eql(pm.collectionVariables.get(\"nameofChecklist\"));\r",
+              "});\r",
+              "pm.test(\"test pos\", function () {\r",
+              "    pm.expect(api.pos).to.eql(pm.collectionVariables.get(\"poscheck\"));\r",
+              "});\r",
+              "pm.test(\"test Id Card\", function () {\r",
+              "    pm.expect(api.idCard).to.eql(pm.collectionVariables.get(\"idcard\"));\r",
+              "});\r",
+              "pm.test(\"test Id Board\", function () {\r",
+              "    pm.expect(api.idBoard).to.eql(pm.collectionVariables.get(\"idBoards\"));\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "https://api.trello.com/1/checklists/{{idChecklist}}?key={{ApiKey}}&token={{ApiToken}}",
-          "protocol": "https",
+          "raw": "{{Base_UrL}}/checklists/{{idChecklist}}?key={{ApiKey}}&token={{ApiToken}}",
           "host": [
-            "api",
-            "trello",
-            "com"
+            "{{Base_UrL}}"
           ],
           "path": [
-            "1",
             "checklists",
             "{{idChecklist}}"
           ],
@@ -806,18 +1057,19 @@
           "script": {
             "exec": [
               "let api = pm.response.json()\r",
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
               "\r",
               "pm.test(\"Products have required keys\", function () {\r",
               "    pm.expect(api).to.include.all.keys(\"id\", \"name\");\r",
               "});\r",
-              "\r",
               "pm.test(\"test Name\", function () {\r",
               "    pm.expect(api.name).to.eql(pm.collectionVariables.get(\"Checklistpdated\"));\r",
               "});\r",
-              ""
+              "pm.test(\"test Id Card\", function () {\r",
+              "    pm.expect(api.idCard).to.eql(pm.collectionVariables.get(\"idcard\"));\r",
+              "});\r",
+              "pm.test(\"test Id Board\", function () {\r",
+              "    pm.expect(api.idBoard).to.eql(pm.collectionVariables.get(\"idBoards\"));\r",
+              "});"
             ],
             "type": "text/javascript",
             "packages": {},
@@ -829,15 +1081,11 @@
         "method": "PUT",
         "header": [],
         "url": {
-          "raw": "https://api.trello.com/1/checklists/{{idChecklist}}?key={{ApiKey}}&token={{ApiToken}}&name={{Checklistpdated}}",
-          "protocol": "https",
+          "raw": "{{Base_UrL}}/checklists/{{idChecklist}}?key={{ApiKey}}&token={{ApiToken}}&name={{Checklistpdated}}&pos={{pos}}",
           "host": [
-            "api",
-            "trello",
-            "com"
+            "{{Base_UrL}}"
           ],
           "path": [
-            "1",
             "checklists",
             "{{idChecklist}}"
           ],
@@ -853,6 +1101,10 @@
             {
               "key": "name",
               "value": "{{Checklistpdated}}"
+            },
+            {
+              "key": "pos",
+              "value": "{{pos}}"
             }
           ]
         }
@@ -860,22 +1112,18 @@
       "response": []
     },
     {
-      "name": "Delete Board",
+      "name": "Delete checklist",
       "request": {
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "https://api.trello.com/1/boards/{{idBoards}}?key={{ApiKey}}&token={{ApiToken}}",
-          "protocol": "https",
+          "raw": "{{Base_UrL}}/checklists/{{idChecklist}}?key={{ApiKey}}&token={{ApiToken}}",
           "host": [
-            "api",
-            "trello",
-            "com"
+            "{{Base_UrL}}"
           ],
           "path": [
-            "1",
-            "boards",
-            "{{idBoards}}"
+            "checklists",
+            "{{idChecklist}}"
           ],
           "query": [
             {
@@ -903,7 +1151,8 @@
               "});"
             ],
             "type": "text/javascript",
-            "packages": {}
+            "packages": {},
+            "requests": {}
           }
         }
       ],
@@ -911,15 +1160,11 @@
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "https://api.trello.com/1/cards/:{id}?key={{ApiKey}}&token={{ApiToken}}",
-          "protocol": "https",
+          "raw": "{{Base_UrL}}/cards/:{id}?key={{ApiKey}}&token={{ApiToken}}",
           "host": [
-            "api",
-            "trello",
-            "com"
+            "{{Base_UrL}}"
           ],
           "path": [
-            "1",
             "cards",
             ":{id}"
           ],
@@ -937,6 +1182,34 @@
             {
               "key": "{id}",
               "value": "{{idcard}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Board",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{Base_UrL}}/boards/{{idBoards}}?key={{ApiKey}}&token={{ApiToken}}",
+          "host": [
+            "{{Base_UrL}}"
+          ],
+          "path": [
+            "boards",
+            "{{idBoards}}"
+          ],
+          "query": [
+            {
+              "key": "key",
+              "value": "{{ApiKey}}"
+            },
+            {
+              "key": "token",
+              "value": "{{ApiToken}}"
             }
           ]
         }
@@ -963,32 +1236,17 @@
         "packages": {},
         "requests": {},
         "exec": [
-          ""
+          "pm.test(\"Status code is 200\", function () {\r",
+          "    pm.response.to.have.status(200);\r",
+          "});\r",
+          "pm.test(\"Response time is less than 200ms\", function () {\r",
+          "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+          "});"
         ]
       }
     }
   ],
   "variable": [
-    {
-      "key": "NameofCard",
-      "value": ""
-    },
-    {
-      "key": "NameofList",
-      "value": ""
-    },
-    {
-      "key": "desc",
-      "value": ""
-    },
-    {
-      "key": "idList",
-      "value": ""
-    },
-    {
-      "key": "idBoards",
-      "value": ""
-    },
     {
       "key": "ApiKey",
       "value": ""
@@ -1002,15 +1260,11 @@
       "value": ""
     },
     {
-      "key": "idcard",
+      "key": "desc",
       "value": ""
     },
     {
-      "key": "nameofChecklist",
-      "value": ""
-    },
-    {
-      "key": "idChecklist",
+      "key": "idBoards",
       "value": ""
     },
     {
@@ -1022,11 +1276,35 @@
       "value": ""
     },
     {
+      "key": "Closed",
+      "value": ""
+    },
+    {
+      "key": "permissionLevel",
+      "value": ""
+    },
+    {
+      "key": "NameofList",
+      "value": ""
+    },
+    {
+      "key": "idList",
+      "value": ""
+    },
+    {
+      "key": "nameofChecklist",
+      "value": ""
+    },
+    {
       "key": "NameofListUpdated",
       "value": ""
     },
     {
-      "key": "Closed",
+      "key": "NameofCard",
+      "value": ""
+    },
+    {
+      "key": "idcard",
       "value": ""
     },
     {
@@ -1038,7 +1316,27 @@
       "value": ""
     },
     {
+      "key": "pos",
+      "value": ""
+    },
+    {
+      "key": "ClosedUpdated",
+      "value": ""
+    },
+    {
+      "key": "idChecklist",
+      "value": ""
+    },
+    {
+      "key": "poscheck",
+      "value": ""
+    },
+    {
       "key": "Checklistpdated",
+      "value": ""
+    },
+    {
+      "key": "Base_UrL",
       "value": ""
     }
   ]
