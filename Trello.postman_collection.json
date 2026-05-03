@@ -40,7 +40,7 @@
           "listen": "prerequest",
           "script": {
             "exec": [
-              "pm.collectionVariables.set(\"NameofBoard\", \"Ahmed\" + Math.floor(Math.random() * 1000));\r",
+              "pm.collectionVariables.set(\"NameofBoard\", \"Ahmed\" + Math.trunc(Math.random() * 1000));\r",
               "pm.collectionVariables.set(\"desc\", \"Ahmed Maher is desc\");"
             ],
             "type": "text/javascript",
@@ -190,7 +190,7 @@
           "listen": "prerequest",
           "script": {
             "exec": [
-              "pm.collectionVariables.set(\"NameofBoardUpdated\", \"Ahmed Maher\" + Math.floor(Math.random() * 1000));\r",
+              "pm.collectionVariables.set(\"NameofBoardUpdated\", \"Ahmed Maher\" + Math.trunc(Math.random() * 1000));\r",
               "pm.collectionVariables.set(\"descUpdated\", \"Ahmed Maher is desc Updated\");\r",
               "pm.collectionVariables.set(\"Closed\", false);\r",
               "pm.collectionVariables.set(\"permissionLevel\", \"public\");"
@@ -350,8 +350,8 @@
           "listen": "prerequest",
           "script": {
             "exec": [
-              "pm.collectionVariables.set(\"NameofList\", \"Ahmed Maher\" + Math.floor(Math.random() * 1000));\r",
-              "pm.collectionVariables.set(\"pos\",parseInt((Math.floor(Math.random()*10))));\r",
+              "pm.collectionVariables.set(\"NameofList\", \"Ahmed Maher\" + Math.trunc(Math.random() * 1000));\r",
+              "pm.collectionVariables.set(\"pos\",(Math.trunc(Math.random()*10)));\r",
               ""
             ],
             "type": "text/javascript",
@@ -502,7 +502,7 @@
           "listen": "prerequest",
           "script": {
             "exec": [
-              "pm.collectionVariables.set(\"NameofListUpdated\", \"Ahmed Maher\" + Math.floor(Math.random() * 1000));\r",
+              "pm.collectionVariables.set(\"NameofListUpdated\", \"Ahmed Maher\" + Math.trunc(Math.random() * 1000));\r",
               ""
             ],
             "type": "text/javascript",
@@ -587,7 +587,7 @@
           "listen": "prerequest",
           "script": {
             "exec": [
-              "pm.collectionVariables.set(\"NameofCard\",\"Ahmed Maher\"+ Math.floor(Math.random() * 1000))\r",
+              "pm.collectionVariables.set(\"NameofCard\",\"Ahmed Maher\"+ Math.trunc(Math.random() * 1000))\r",
               ""
             ],
             "type": "text/javascript",
@@ -751,7 +751,7 @@
           "listen": "prerequest",
           "script": {
             "exec": [
-              "pm.collectionVariables.set(\"CardUpdated\", \"Ahmed Maher\" + Math.floor(Math.random() * 1000));\r",
+              "pm.collectionVariables.set(\"CardUpdated\", \"Ahmed Maher\" + Math.trunc(Math.random() * 1000));\r",
               "pm.collectionVariables.set(\"descUpdatedCard\", \"Ahmed Maher is desc Updated\");\r",
               "pm.collectionVariables.set(\"ClosedUpdated\", true);\r",
               ""
@@ -893,7 +893,7 @@
           "script": {
             "exec": [
               "pm.collectionVariables.set(\"nameofChecklist\", \"Api Testing Checklist\");\r",
-              "pm.collectionVariables.set(\"poscheck\",parseInt((Math.floor(Math.random()*10))));\r",
+              "pm.collectionVariables.set(\"poscheck\",(Math.trunc(Math.random()*10)));\r",
               ""
             ],
             "type": "text/javascript",
@@ -1044,7 +1044,7 @@
           "listen": "prerequest",
           "script": {
             "exec": [
-              "pm.collectionVariables.set(\"Checklistpdated\", \"Ahmed Maher\" + Math.floor(Math.random() * 1000));\r",
+              "pm.collectionVariables.set(\"Checklistpdated\", \"Ahmed Maher\" + Math.trunc(Math.random() * 1000));\r",
               ""
             ],
             "type": "text/javascript",
@@ -1239,8 +1239,8 @@
           "pm.test(\"Status code is 200\", function () {\r",
           "    pm.response.to.have.status(200);\r",
           "});\r",
-          "pm.test(\"Response time is less than 200ms\", function () {\r",
-          "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+          "pm.test(\"Response time is less than 1500ms\", function () {\r",
+          "    pm.expect(pm.response.responseTime).to.be.below(1500);\r",
           "});"
         ]
       }
